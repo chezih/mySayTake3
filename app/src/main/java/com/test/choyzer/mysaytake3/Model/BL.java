@@ -10,6 +10,7 @@ import java.lang.String;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 /**
  * Created by CheziAndSima on 03/06/2015.
@@ -31,7 +32,7 @@ public class BL {
 //        return convertJsonToUser(userJson);
 //    }
 
-    public ArrayList<User> getAllUsers() throws JSONException {
+    public ArrayList<User> getAllUsers() throws JSONException, ExecutionException, InterruptedException {
         String usersJsonString = comm.getJsonByPath(USER_TABLE_PATH_NAME);
 
         ArrayList<User> users = new ArrayList<User>();

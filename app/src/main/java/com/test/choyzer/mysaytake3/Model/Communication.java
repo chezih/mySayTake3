@@ -18,6 +18,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Iterator;
+import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -31,29 +32,29 @@ public class Communication {
     String jsonString;
     String userPath;
 
-    public String getJsonByPath(String path) {
+    public String getJsonByPath(String path) throws ExecutionException, InterruptedException {
 
         userPath = REST_BASE_URL + path;
 
         GetJsonAsync getJsonAsync = new GetJsonAsync();
         getJsonAsync.execute();
-        //String s = getJSON(REST_BASE_URL + path, 5000);
-        return null;
+        String s = new GetJsonAsync().execute(userPath).get();
+        return s;
     }
 
 
-    class GetJsonAsync extends AsyncTask<Void, Void, Void> {
+    class GetJsonAsync extends AsyncTask<String, Void, String> {
 
         @Override
-        protected void onPostExecute(Void aVoid) {
+        protected void onPostExecute(String aVoid) {
 
         }
 
         @Override
-        protected Void doInBackground(Void... voids) {
+        protected String doInBackground(String... urls) {
 
-            jsonString = getJSON(userPath, 5000);
-            return null;
+            jsonString = getJSON(urls[0], 5000);
+            return jsonString;
         }
 
         public String getJSON(String url, int timeout) {

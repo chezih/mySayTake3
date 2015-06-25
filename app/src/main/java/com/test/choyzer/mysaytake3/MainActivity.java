@@ -14,6 +14,7 @@ import com.test.choyzer.mysaytake3.Model.Entities.User;
 import org.json.JSONException;
 
 import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -25,6 +26,7 @@ public class MainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        bl = new BL();
     }
 
     @Override
@@ -49,20 +51,20 @@ public class MainActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void getAllUsers(View view) throws JSONException {
-            TextView tv = (TextView) findViewById(R.id.infoTextArea);
-            ArrayList<User> users = bl.getAllUsers();
+    public void getAllUsers(View view) throws JSONException, ExecutionException, InterruptedException {
+        TextView tv = (TextView) findViewById(R.id.infoTextArea);
+        ArrayList<User> users = bl.getAllUsers();
 
-            for (int i = 0; i < users.size(); i++) {
-                result += "USER #" + i + "\n";
-                result += "Id: " + users.get(i).getId() + "\n";
-                result += "Name: " + users.get(i).getName() + "\n\n";
-            }
+        for (int i = 0; i < users.size(); i++) {
+            result += "USER #" + i + "\n";
+            result += "Id: " + users.get(i).getId() + "\n";
+            result += "Name: " + users.get(i).getName() + "\n\n";
+        }
 //            result = "";
-              tv.setText("result");
+        tv.setText("result");
 //            Translate translate = new Translate();
 //            translate.execute();
-        }
+    }
 
     public void getAllBills(View view) {
     }
