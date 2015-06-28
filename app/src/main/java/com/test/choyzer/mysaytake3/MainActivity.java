@@ -1,5 +1,6 @@
 package com.test.choyzer.mysaytake3;
 
+import android.os.AsyncTask;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -13,20 +14,30 @@ import com.test.choyzer.mysaytake3.Model.Entities.User;
 
 import org.json.JSONException;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 public class MainActivity extends ActionBarActivity {
 
     String result;
     BL bl = null;
+    TextView tv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         bl = new BL();
+        tv = (TextView) findViewById(R.id.infoTextArea);
     }
 
     @Override
@@ -52,18 +63,44 @@ public class MainActivity extends ActionBarActivity {
     }
 
     public void getAllUsers(View view) throws JSONException, ExecutionException, InterruptedException {
-        TextView tv = (TextView) findViewById(R.id.infoTextArea);
-        ArrayList<User> users = bl.getAllUsers();
+        new GetAndDisplayAllUsersAsync().execute();
+    }
 
-        for (int i = 0; i < users.size(); i++) {
-            result += "USER #" + i + "\n";
-            result += "Id: " + users.get(i).getId() + "\n";
-            result += "Name: " + users.get(i).getName() + "\n\n";
-        }
+
+    class GetAndDisplayAllUsersAsync extends AsyncTask<Void, Void, Void>
+
+    {
+        ArrayList<User> users;
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+
+            for (int i = 0; i < users.size(); i++) {
+                result += "USER #" + i + "\n";
+                result += "Id: " + users.get(i).getId() + "\n";
+                result += "Name: " + users.get(i).getName() + "\n\n";
+            }
 //            result = "";
-        tv.setText("result");
-//            Translate translate = new Translate();
-//            translate.execute();
+            tv.setText("result");
+        }
+
+        @Override
+        protected Void doInBackground(Void... urls) {
+
+            try {
+                android.os.Debug.waitForDebugger();
+                ArrayList<User> users = bl.getAllUsers();
+                android.os.Debug.waitForDebugger();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
     }
 
     public void getAllBills(View view) {

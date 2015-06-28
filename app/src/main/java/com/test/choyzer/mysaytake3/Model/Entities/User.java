@@ -20,7 +20,7 @@ public class User {
 
             switch (key) {
                 case "id": {
-                    this.id = Integer.parseInt(userJson.getString(key));
+                    this.id = userJson.getInt(key);
                     break;
                 }
                 case "first_name": {
