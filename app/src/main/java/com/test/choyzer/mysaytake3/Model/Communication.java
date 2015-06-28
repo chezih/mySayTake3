@@ -37,12 +37,7 @@ public class Communication {
     public String getJsonByPath(String path) throws ExecutionException, InterruptedException {
 
         userPath = REST_BASE_URL + path;
-
-//        GetJsonAsync getJsonAsync = new GetJsonAsync();
-//        getJsonAsync.execute();
-        //String dasd = GetInfo(userPath);
-        String s = new GetJsonAsync().execute(userPath).get();
-        return s;
+        return getJSON(userPath, 5000);
     }
 
 
@@ -94,68 +89,4 @@ public class Communication {
         return null;
     }
 
-
-
-    class GetJsonAsync extends AsyncTask<String, Void, String> {
-
-        @Override
-        protected void onPostExecute(String aVoid) {
-
-        }
-
-        @Override
-        protected String doInBackground(String... urls) {
-
-            jsonString = getJSON(urls[0], 5000);
-            return jsonString;
-        }
-
-        public String getJSON(String url, int timeout) {
-            HttpURLConnection c = null;
-            try {
-                URL u = new URL(url);
-                c = (HttpURLConnection) u.openConnection();
-                c.setRequestMethod("GET");
-                c.setRequestProperty("Content-length", "0");
-                c.setRequestProperty("Content-Type", "text/json; charset=utf-8");
-                c.setUseCaches(false);
-                c.setAllowUserInteraction(false);
-                c.setConnectTimeout(timeout);
-                c.setReadTimeout(timeout);
-                c.connect();
-                int status = c.getResponseCode();
-
-                switch (status) {
-                    case 200:
-                    case 201:
-                        BufferedReader br = new BufferedReader(new InputStreamReader(c.getInputStream()));
-                        StringBuilder sb = new StringBuilder();
-                        String line;
-                        while ((line = br.readLine()) != null) {
-                            sb.append(line + "\n");
-                        }
-                        br.close();
-                        return sb.toString();
-                }
-
-            } catch (MalformedURLException ex) {
-                Logger.getLogger(getClass().getName()).log(Level.SEVERE, null, ex);
-            } catch (IOException ex) {
-                Logger.getLogger(getClass().getName()).log(Level.SEVERE, null, ex);
-//            } catch (ProtocolException e) {
-//                e.printStackTrace();
-//            } catch (IOException e) {
-//                e.printStackTrace();
-            } finally {
-                if (c != null) {
-                    try {
-                        c.disconnect();
-                    } catch (Exception ex) {
-                        Logger.getLogger(getClass().getName()).log(Level.SEVERE, null, ex);
-                    }
-                }
-            }
-            return null;
-        }
-    }
 }

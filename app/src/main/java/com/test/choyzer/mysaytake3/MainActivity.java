@@ -63,15 +63,14 @@ public class MainActivity extends ActionBarActivity {
     }
 
     public void getAllUsers(View view) throws JSONException, ExecutionException, InterruptedException {
+        tv.setText(result);
         new GetAndDisplayAllUsersAsync().execute();
     }
 
-
+    ArrayList<User> users;
     class GetAndDisplayAllUsersAsync extends AsyncTask<Void, Void, Void>
 
     {
-        ArrayList<User> users;
-
         @Override
         protected void onPostExecute(Void aVoid) {
 
@@ -80,17 +79,14 @@ public class MainActivity extends ActionBarActivity {
                 result += "Id: " + users.get(i).getId() + "\n";
                 result += "Name: " + users.get(i).getName() + "\n\n";
             }
-//            result = "";
-            tv.setText("result");
+            tv.setText(result);
         }
 
         @Override
         protected Void doInBackground(Void... urls) {
 
             try {
-                android.os.Debug.waitForDebugger();
-                ArrayList<User> users = bl.getAllUsers();
-                android.os.Debug.waitForDebugger();
+                users = bl.getAllUsers();
             } catch (JSONException e) {
                 e.printStackTrace();
             } catch (ExecutionException e) {
