@@ -49,6 +49,7 @@ public class BL {
     }
 
 
+
 //    public List<Bill> getAllBills() {
 //        JSONObject billsJson = comm.getJsonByPath(BILL_TABLE_PATH_NAME);
 //    }
