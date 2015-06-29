@@ -63,7 +63,6 @@ public class MainActivity extends ActionBarActivity {
     }
 
     public void getAllUsers(View view) throws JSONException, ExecutionException, InterruptedException {
-        tv.setText(result);
         new GetAndDisplayAllUsersAsync().execute();
     }
 
