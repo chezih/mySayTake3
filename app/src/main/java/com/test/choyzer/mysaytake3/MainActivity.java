@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.test.choyzer.mysaytake3.Activities.LoginActivity;
 import com.test.choyzer.mysaytake3.Model.Authentication.TokenGetter;
 import com.test.choyzer.mysaytake3.Model.BL;
 import com.test.choyzer.mysaytake3.Model.Entities.User;
@@ -46,13 +47,23 @@ public class MainActivity extends ActionBarActivity {
         String loggedInUserName = CredentialsStorage.getFromPrefs(MainActivity.this, CredentialsStorage.PREFS_LOGIN_USERNAME_KEY, "");
         String loggedToken = CredentialsStorage.getFromPrefs(MainActivity.this, CredentialsStorage.PREFS_LOGIN_TOKEN_KEY, "");
 
-        if (loggedToken == "") {
-            //TODO call login
-            Intent intent = new Intent(rfgfdgf);
-        }
-
         bl = new BL();
         tv = (TextView) findViewById(R.id.infoTextArea);
+
+        if (loggedToken == "") {
+            //TODO call login
+            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+            startActivity(intent);
+        }
+        else
+        {
+            if(loggedInUserName != "")
+            {
+                Toast.makeText(getApplicationContext(), "Welcome back " + loggedInUserName, Toast.LENGTH_LONG).show();
+            }
+        }
+
+
     }
 
     @Override

@@ -1,5 +1,7 @@
 package com.test.choyzer.mysaytake3.Activities;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -10,6 +12,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.test.choyzer.mysaytake3.MainActivity;
 import com.test.choyzer.mysaytake3.Model.Authentication.TokenGetter;
 import com.test.choyzer.mysaytake3.R;
 import com.test.choyzer.mysaytake3.Utils.CredentialsStorage;
@@ -21,7 +24,7 @@ import java.util.Iterator;
 import java.util.concurrent.ExecutionException;
 
 
-public class LoginActivity extends ActionBarActivity {
+public class LoginActivity extends Activity {
 
 
     EditText userNameEditText;
@@ -75,6 +78,10 @@ public class LoginActivity extends ActionBarActivity {
                     String key = (String) keys.next();
                     Token = tokenJsonObject.getString(key);
                     Toast.makeText(getApplicationContext(), "Authentication successful with token: " + Token, Toast.LENGTH_LONG).show();
+                    CredentialsStorage.saveToPrefs(LoginActivity.this, CredentialsStorage.PREFS_LOGIN_USERNAME_KEY, userNameEditText.getText().toString());
+                    CredentialsStorage.saveToPrefs(LoginActivity.this, CredentialsStorage.PREFS_LOGIN_TOKEN_KEY, Token);
+                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                    startActivity(intent);
                 }
             } catch (JSONException e) {
                 Toast.makeText(getApplicationContext(), "Authentication failed", Toast.LENGTH_LONG).show();
