@@ -11,6 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.test.choyzer.mysaytake3.Activities.LoginActivity;
+import com.test.choyzer.mysaytake3.Activities.UserProfileActivity;
 import com.test.choyzer.mysaytake3.Model.Authentication.TokenGetter;
 import com.test.choyzer.mysaytake3.Model.BL;
 import com.test.choyzer.mysaytake3.Model.Entities.User;
@@ -37,6 +38,9 @@ public class MainActivity extends ActionBarActivity {
     BL bl = null;
     TextView tv;
     String Token;
+    String loggedInUserName;
+    User currentUser;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,7 +48,7 @@ public class MainActivity extends ActionBarActivity {
 
 
         // To retrieve values back
-        String loggedInUserName = CredentialsStorage.getFromPrefs(MainActivity.this, CredentialsStorage.PREFS_LOGIN_USERNAME_KEY, "");
+        loggedInUserName = CredentialsStorage.getFromPrefs(MainActivity.this, CredentialsStorage.PREFS_LOGIN_USERNAME_KEY, "");
         String loggedToken = CredentialsStorage.getFromPrefs(MainActivity.this, CredentialsStorage.PREFS_LOGIN_TOKEN_KEY, "");
 
         bl = new BL();
@@ -54,12 +58,10 @@ public class MainActivity extends ActionBarActivity {
             //TODO call login
             Intent intent = new Intent(MainActivity.this, LoginActivity.class);
             startActivity(intent);
-        }
-        else
-        {
-            if(loggedInUserName != "")
-            {
+        } else {
+            if (loggedInUserName != "") {
                 Toast.makeText(getApplicationContext(), "Welcome back " + loggedInUserName, Toast.LENGTH_LONG).show();
+                new GetAndDisplayAllUsersAsync().execute();
             }
         }
 
@@ -83,6 +85,14 @@ public class MainActivity extends ActionBarActivity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
+        }
+        if (id == R.id.action_userProfile) {
+            Bundle b = new Bundle();
+            b.putSerializable("currentUser", currentUser);
+
+            Intent intent = new Intent(MainActivity.this, UserProfileActivity.class);
+            intent.putExtras(b);
+            startActivity(intent);
         }
 
         return super.onOptionsItemSelected(item);
@@ -115,7 +125,16 @@ public class MainActivity extends ActionBarActivity {
 
             try {
                 users = bl.getAllUsers();
-                 Token = TokenGetter.executePost(new JSONObject("{\"password\": \"050788\", \"username\": \"chezi\"}"));
+                for (User user : users) {
+
+                    if (user.getFirstName() == loggedInUserName) {
+                        currentUser = user;
+                    }
+                    // 1 - can call methods of element
+
+                    // ...
+                }
+                Token = TokenGetter.executePost(new JSONObject("{\"password\": \"050788\", \"username\": \"chezi\"}"));
             } catch (JSONException e) {
                 e.printStackTrace();
             } catch (ExecutionException e) {
