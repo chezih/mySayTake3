@@ -38,8 +38,8 @@ public class MainActivity extends ActionBarActivity {
     String result;
     BL bl = null;
     TextView tv;
-    String Token;
     String loggedInUserName;
+    String loggedToken;
     User currentUser;
     ProgressDialog progress;
 
@@ -51,7 +51,7 @@ public class MainActivity extends ActionBarActivity {
 
         // To retrieve values back
         loggedInUserName = CredentialsStorage.getFromPrefs(MainActivity.this, CredentialsStorage.PREFS_LOGIN_USERNAME_KEY, "");
-        String loggedToken = CredentialsStorage.getFromPrefs(MainActivity.this, CredentialsStorage.PREFS_LOGIN_TOKEN_KEY, "");
+        loggedToken = CredentialsStorage.getFromPrefs(MainActivity.this, CredentialsStorage.PREFS_LOGIN_TOKEN_KEY, "");
 
         bl = new BL();
         tv = (TextView) findViewById(R.id.infoTextArea);
@@ -63,11 +63,15 @@ public class MainActivity extends ActionBarActivity {
         } else {
             if (loggedInUserName != "") {
                 Toast.makeText(getApplicationContext(), "Welcome back " + loggedInUserName, Toast.LENGTH_LONG).show();
-                progress = new ProgressDialog(this);
-                progress.setTitle("Loading");
-                progress.setMessage("Wait while loading...");
-                progress.show();
-                new GetAndDisplayAllUsersAsync().execute();
+                try {
+                    getAllUsers(this.findViewById(android.R.id.content));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
         }
 
@@ -97,11 +101,23 @@ public class MainActivity extends ActionBarActivity {
             intent.putExtra("currentUser", currentUser);
             startActivity(intent);
         }
-
+        if (id == R.id.action_logOut) {
+            loggedInUserName="";
+            loggedToken="";
+            CredentialsStorage.saveToPrefs(MainActivity.this, CredentialsStorage.PREFS_LOGIN_USERNAME_KEY, "");
+            CredentialsStorage.saveToPrefs(MainActivity.this, CredentialsStorage.PREFS_LOGIN_TOKEN_KEY, "");
+            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+            startActivity(intent);
+        }
         return super.onOptionsItemSelected(item);
     }
 
     public void getAllUsers(View view) throws JSONException, ExecutionException, InterruptedException {
+        progress = new ProgressDialog(MainActivity.this);
+        progress.setTitle("Loading");
+        progress.setMessage("Wait while loading...");
+        progress.show();
+
         new GetAndDisplayAllUsersAsync().execute();
     }
 
@@ -119,8 +135,8 @@ public class MainActivity extends ActionBarActivity {
                 result += "Name: " + users.get(i).getName() + "\n\n";
             }
 
-            result += Token;
-            //tv.setText(result);
+            result += loggedToken ;
+            tv.setText(result);
         }
 
         @Override
@@ -138,7 +154,7 @@ public class MainActivity extends ActionBarActivity {
                     // ...
                 }
                 progress.dismiss();
-                Token = TokenGetter.executePost(new JSONObject("{\"password\": \"050788\", \"username\": \"chezi\"}"));
+//                Token = TokenGetter.executePost(new JSONObject("{\"password\": \"050788\", \"username\": \"chezi\"}"));
             } catch (JSONException e) {
                 e.printStackTrace();
             } catch (ExecutionException e) {

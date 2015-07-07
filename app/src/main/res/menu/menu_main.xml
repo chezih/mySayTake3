@@ -5,4 +5,6 @@
         android:orderInCategory="100" app:showAsAction="never" />
     <item android:id="@+id/action_userProfile" android:title="פרופיל משתמש"
         android:orderInCategory="100" app:showAsAction="never" />
+    <item android:id="@+id/action_logOut" android:title="התנתק"
+        android:orderInCategory="100" app:showAsAction="never" />
 </menu>
