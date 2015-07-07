@@ -1,12 +1,21 @@
 package com.test.choyzer.mysaytake3.Activities;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.test.choyzer.mysaytake3.Model.Entities.User;
 import com.test.choyzer.mysaytake3.R;
+
+import java.io.InputStream;
 
 
 /**
@@ -16,11 +25,40 @@ public class UserProfileActivity extends Activity {
 
     User currentUser;
 
+    TextView UserProfileNameTextView;
+    TextView UserProfileStatusTextView;
+    TextView UserProfileAge;
+    TextView UserProfileGender;
+    TextView UserProfileAddress;
+    TextView UserProfileParty;
+
+    ImageView UserProfileImageView;
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.userprofile_layout);
+        Intent intent = getIntent();
+        currentUser = (User) intent.getSerializableExtra("currentUser");
 
-        currentUser = (User) getIntent().getStringExtra("currentUser");
+        UserProfileNameTextView = (TextView) findViewById(R.id.UserProfileNameTextView);
+        UserProfileStatusTextView = (TextView) findViewById(R.id.UserProfileStatusTextView);
+        UserProfileAge = (TextView) findViewById(R.id.UserProfileAge);
+        UserProfileGender = (TextView) findViewById(R.id.UserProfileGender);
+        UserProfileAddress = (TextView) findViewById(R.id.UserProfileAddress);
+        UserProfileParty = (TextView) findViewById(R.id.UserProfileParty);
+        UserProfileImageView = (ImageView) findViewById(R.id.UserProfileImageView);
+
+        UserProfileNameTextView.setText(currentUser.getFirstName() + " " + currentUser.getLastName());
+        UserProfileStatusTextView.setText(currentUser.getStatus());
+        UserProfileAge.setText(String.valueOf(currentUser.getAge()));
+        UserProfileGender.setText(currentUser.getGender().equals("M") ? "זכר" : "נקבה");
+        UserProfileAddress.setText(currentUser.getAddress());
+        UserProfileParty.setText(String.valueOf(currentUser.getParty()));
+
+        new DownloadImageTask(UserProfileImageView)
+                .execute(currentUser.getPhotoURL());
+
+
     }
 
     @Override
@@ -43,5 +81,30 @@ public class UserProfileActivity extends Activity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
+        ImageView bmImage;
+
+        public DownloadImageTask(ImageView bmImage) {
+            this.bmImage = bmImage;
+        }
+
+        protected Bitmap doInBackground(String... urls) {
+            String urldisplay = urls[0];
+            Bitmap mIcon11 = null;
+            try {
+                InputStream in = new java.net.URL(urldisplay).openStream();
+                mIcon11 = BitmapFactory.decodeStream(in);
+            } catch (Exception e) {
+                Log.e("Error", e.getMessage());
+                e.printStackTrace();
+            }
+            return mIcon11;
+        }
+
+        protected void onPostExecute(Bitmap result) {
+            bmImage.setImageBitmap(result);
+        }
     }
 }

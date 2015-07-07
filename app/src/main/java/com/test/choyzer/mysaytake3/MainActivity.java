@@ -1,5 +1,6 @@
 package com.test.choyzer.mysaytake3;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.ActionBarActivity;
@@ -40,6 +41,7 @@ public class MainActivity extends ActionBarActivity {
     String Token;
     String loggedInUserName;
     User currentUser;
+    ProgressDialog progress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +63,10 @@ public class MainActivity extends ActionBarActivity {
         } else {
             if (loggedInUserName != "") {
                 Toast.makeText(getApplicationContext(), "Welcome back " + loggedInUserName, Toast.LENGTH_LONG).show();
+                progress = new ProgressDialog(this);
+                progress.setTitle("Loading");
+                progress.setMessage("Wait while loading...");
+                progress.show();
                 new GetAndDisplayAllUsersAsync().execute();
             }
         }
@@ -87,11 +93,8 @@ public class MainActivity extends ActionBarActivity {
             return true;
         }
         if (id == R.id.action_userProfile) {
-            Bundle b = new Bundle();
-            b.putSerializable("currentUser", currentUser);
-
             Intent intent = new Intent(MainActivity.this, UserProfileActivity.class);
-            intent.putExtras(b);
+            intent.putExtra("currentUser", currentUser);
             startActivity(intent);
         }
 
@@ -117,7 +120,7 @@ public class MainActivity extends ActionBarActivity {
             }
 
             result += Token;
-            tv.setText(result);
+            //tv.setText(result);
         }
 
         @Override
@@ -127,13 +130,14 @@ public class MainActivity extends ActionBarActivity {
                 users = bl.getAllUsers();
                 for (User user : users) {
 
-                    if (user.getFirstName() == loggedInUserName) {
+                    if (loggedInUserName.equals(user.getFirstName())) {
                         currentUser = user;
                     }
                     // 1 - can call methods of element
 
                     // ...
                 }
+                progress.dismiss();
                 Token = TokenGetter.executePost(new JSONObject("{\"password\": \"050788\", \"username\": \"chezi\"}"));
             } catch (JSONException e) {
                 e.printStackTrace();
