@@ -1,6 +1,7 @@
 package com.test.choyzer.mysaytake3.Activities;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.ActionBarActivity;
@@ -26,6 +27,7 @@ import java.util.concurrent.ExecutionException;
 
 public class LoginActivity extends Activity {
 
+    ProgressDialog progress;
 
     EditText userNameEditText;
     EditText passwordEditText;
@@ -64,6 +66,11 @@ public class LoginActivity extends Activity {
     }
 
     public void Login(View view) {
+        progress = new ProgressDialog(LoginActivity.this);
+        progress.setTitle("Loading");
+        progress.setMessage("Please wait...");
+        progress.show();
+
         new LoginAsync().execute();
     }
 
@@ -71,13 +78,14 @@ public class LoginActivity extends Activity {
         @Override
         protected void onPostExecute(Void aVoid) {
 
+            progress.dismiss();
             try {
                 JSONObject tokenJsonObject = new JSONObject(TokenJson);
                 Iterator<?> keys = tokenJsonObject.keys();
                 while (keys.hasNext()) {
                     String key = (String) keys.next();
                     Token = tokenJsonObject.getString(key);
-                    Toast.makeText(getApplicationContext(), "Authentication successful with token: " + Token, Toast.LENGTH_LONG).show();
+                    //Toast.makeText(getApplicationContext(), "Authentication successful with token: " + Token, Toast.LENGTH_LONG).show();
                     CredentialsStorage.saveToPrefs(LoginActivity.this, CredentialsStorage.PREFS_LOGIN_USERNAME_KEY, userNameEditText.getText().toString());
                     CredentialsStorage.saveToPrefs(LoginActivity.this, CredentialsStorage.PREFS_LOGIN_TOKEN_KEY, Token);
                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);

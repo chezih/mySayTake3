@@ -51,7 +51,7 @@ public class UserProfileActivity extends Activity {
         UserProfileNameTextView.setText(currentUser.getFirstName() + " " + currentUser.getLastName());
         UserProfileStatusTextView.setText(currentUser.getStatus());
         UserProfileAge.setText(String.valueOf(currentUser.getAge()));
-        UserProfileGender.setText(currentUser.getGender().equals("M") ? "זכר" : "נקבה");
+        UserProfileGender.setText(currentUser.getGender().equals("M") ? "male" : "female");
         UserProfileAddress.setText(currentUser.getAddress());
         UserProfileParty.setText(String.valueOf(currentUser.getParty()));
 

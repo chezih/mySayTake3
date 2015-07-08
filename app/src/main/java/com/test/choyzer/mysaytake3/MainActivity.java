@@ -56,21 +56,20 @@ public class MainActivity extends ActionBarActivity {
         tv = (TextView) findViewById(R.id.infoTextArea);
 
         if (loggedToken == "") {
-            //TODO call login
             Intent intent = new Intent(MainActivity.this, LoginActivity.class);
             startActivity(intent);
         } else {
             if (loggedInUserName != "") {
-                Toast.makeText(getApplicationContext(), "Welcome back " + loggedInUserName, Toast.LENGTH_LONG).show();
-                try {
-                    getAllUsers(this.findViewById(android.R.id.content));
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                } catch (ExecutionException e) {
-                    e.printStackTrace();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+                //Toast.makeText(getApplicationContext(), "Welcome back " + loggedInUserName, Toast.LENGTH_LONG).show();
+//                try {
+//                    getAllUsers(this.findViewById(android.R.id.content));
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                } catch (ExecutionException e) {
+//                    e.printStackTrace();
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
             }
         }
 
@@ -96,6 +95,16 @@ public class MainActivity extends ActionBarActivity {
             return true;
         }
         if (id == R.id.action_userProfile) {
+            try {
+                getAllUsers(this.findViewById(android.R.id.content));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
             Intent intent = new Intent(MainActivity.this, UserProfileActivity.class);
             intent.putExtra("currentUser", currentUser);
             startActivity(intent);
@@ -113,8 +122,8 @@ public class MainActivity extends ActionBarActivity {
 
     public void getAllUsers(View view) throws JSONException, ExecutionException, InterruptedException {
         progress = new ProgressDialog(MainActivity.this);
-        progress.setTitle("Loading");
-        progress.setMessage("Wait while loading...");
+        progress.setTitle("טוען");
+        progress.setMessage("אנא המתן...");
         progress.show();
 
         new GetAndDisplayAllUsersAsync().execute();
