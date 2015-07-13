@@ -14,7 +14,7 @@
         android:id="@+id/billDetailSubjectTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#2196F3"
+        android:background="#1A237E"
         android:text="Subject"
         android:textColor="#FFFFFF"
         android:textSize="20sp" />
@@ -23,13 +23,14 @@
         android:id="@+id/billDetailDescriptionTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#90CAF9"
+        android:background="#B39DDB"
         android:paddingTop="10dp"
         android:text="Description"
-        android:textSize="16sp"/>
+        android:textSize="16sp"
+        android:layout_marginBottom="20dp"/>
 
     <ListView
-        android:id="@+id/billDetailListView"
+        android:id="@+id/billDetailCommentsListView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:divider="@android:color/transparent"

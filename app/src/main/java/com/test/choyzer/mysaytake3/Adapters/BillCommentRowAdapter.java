@@ -36,7 +36,7 @@ public class BillCommentRowAdapter extends ArrayAdapter<BillComment> {
         TextView commentDateTextView = (TextView) convertView.findViewById(R.id.commentDateTextView);
         // Populate the data into the template view using the data object
         commentContentTextView.setText(billComment.getContent());
-        commentUserNameTextView.setText(billComment.getUser_id());
+        commentUserNameTextView.setText(String.valueOf(billComment.getUser_id()));
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         commentDateTextView.setText(sdf.format(billComment.getDate()));
         // Return the completed view to render on screen

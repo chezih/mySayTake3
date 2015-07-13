@@ -37,7 +37,7 @@ public class BillDetailActivity extends Activity {
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_bills);
+        setContentView(R.layout.activity_bill_details);
         bl = new BL();
         progress = new ProgressDialog(BillDetailActivity.this);
         progress.setTitle(getString(R.string.Login_dialog_head));
@@ -49,9 +49,9 @@ public class BillDetailActivity extends Activity {
         billDetailDescriptionTextView = (TextView) findViewById(R.id.billDetailDescriptionTextView);
 
         billDetailSubjectTextView.setText(currentBill.getSubject());
-        billDetailSubjectTextView.setText(currentBill.getStatus());
+        billDetailDescriptionTextView.setText(currentBill.getDescription());
 
-
+        listView = (ListView) findViewById(R.id.billDetailCommentsListView);
         // Construct the data source
 // Create the adapter to convert the array to views
         arrayOfBillComments = new ArrayList<BillComment>();
