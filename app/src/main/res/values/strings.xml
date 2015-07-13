@@ -5,6 +5,11 @@
     <string name="action_settings">הגדרות</string>
 
     <string name="action_userProfile">פרופיל משתמש</string>
+    <string name="Login_text">Login</string>
+
+
+    <string name="Login_dialog_head">טוען</string>
+    <string name="Login_dialog_message">הדף בטעינה אנא המתן</string>
 
 
 </resources>

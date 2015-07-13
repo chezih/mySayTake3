@@ -21,6 +21,8 @@
         </activity>
         <activity android:name=".Activities.LoginActivity"/>
         <activity android:name=".Activities.UserProfileActivity"/>
+        <activity android:name=".Activities.BillsActivity"/>
+        <activity android:name=".Activities.BillDetailActivity"/>
     </application>
 
 </manifest>

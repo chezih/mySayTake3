@@ -1,6 +1,6 @@
 package com.test.choyzer.mysaytake3.Model;
 
-import  com.test.choyzer.mysaytake3.Model.Entities.*;
+import com.test.choyzer.mysaytake3.Model.Entities.*;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -8,8 +8,6 @@ import org.json.JSONObject;
 
 import java.lang.String;
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -21,6 +19,7 @@ public class BL {
 
     private final String USER_TABLE_PATH_NAME = "users";
     private final String BILL_TABLE_PATH_NAME = "bills";
+    private final String BILL_COMMENT_TABLE_PATH_NAME = "billComments";
 
     public BL() {
         comm = new Communication();
@@ -41,35 +40,43 @@ public class BL {
         for (int i = 0; i < jsonArray.length(); i++) {
             JSONObject userObject =
                     jsonArray.getJSONObject(i);
-            users.add(convertJsonToUser(userObject));
+            users.add(new User(userObject));
         }
 
         return users;
 
     }
 
+    public ArrayList<Bill> getAllBills() throws JSONException, ExecutionException, InterruptedException {
+        String billsJsonString = comm.getJsonByPath(BILL_TABLE_PATH_NAME);
 
+        ArrayList<Bill> bills = new ArrayList<Bill>();
+        JSONArray jsonArray = new JSONArray(billsJsonString);
 
-//    public List<Bill> getAllBills() {
-//        JSONObject billsJson = comm.getJsonByPath(BILL_TABLE_PATH_NAME);
-//    }
+        for (int i = 0; i < jsonArray.length(); i++) {
+            JSONObject billObject =
+                    jsonArray.getJSONObject(i);
+            bills.add(new Bill(billObject));
+        }
 
-//    public Bill getBillByID(int id) {
-//        JSONObject userJson = comm.getJsonByPath(BILL_TABLE_PATH_NAME);
-//
-//        return convertJsonToBill(userJson);
-//    }
+        return bills;
 
-
-    private User convertJsonToUser(JSONObject userJson) throws JSONException {
-
-        User u = new User(userJson);
-        return u;
     }
 
-//    private Bill convertJsonToBill(JSONObject billJson) {
-//        Bill b = new Bill();
-//
-//        return b;
-//    }
+
+    public ArrayList<BillComment> getBillsComments(int id) throws ExecutionException, InterruptedException, JSONException {
+
+        String billsCommentsJsonString = comm.getJsonByPath(BILL_COMMENT_TABLE_PATH_NAME +"/?bill_id="+String.valueOf(id));
+
+        ArrayList<BillComment> billsComments = new ArrayList<BillComment>();
+        JSONArray jsonArray = new JSONArray(billsCommentsJsonString);
+
+        for (int i = 0; i < jsonArray.length(); i++) {
+            JSONObject billObject =
+                    jsonArray.getJSONObject(i);
+            billsComments.add(new BillComment(billObject));
+        }
+        return billsComments;
+
+    }
 }

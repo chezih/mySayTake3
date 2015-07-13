@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.test.choyzer.mysaytake3.Activities.BillsActivity;
 import com.test.choyzer.mysaytake3.Activities.LoginActivity;
 import com.test.choyzer.mysaytake3.Activities.UserProfileActivity;
 import com.test.choyzer.mysaytake3.Model.Authentication.TokenGetter;
@@ -47,7 +48,7 @@ public class MainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        
+
         // To retrieve values back
         loggedInUserName = CredentialsStorage.getFromPrefs(MainActivity.this, CredentialsStorage.PREFS_LOGIN_USERNAME_KEY, "");
         loggedToken = CredentialsStorage.getFromPrefs(MainActivity.this, CredentialsStorage.PREFS_LOGIN_TOKEN_KEY, "");
@@ -110,8 +111,8 @@ public class MainActivity extends ActionBarActivity {
             startActivity(intent);
         }
         if (id == R.id.action_logOut) {
-            loggedInUserName="";
-            loggedToken="";
+            loggedInUserName = "";
+            loggedToken = "";
             CredentialsStorage.saveToPrefs(MainActivity.this, CredentialsStorage.PREFS_LOGIN_USERNAME_KEY, "");
             CredentialsStorage.saveToPrefs(MainActivity.this, CredentialsStorage.PREFS_LOGIN_TOKEN_KEY, "");
             Intent intent = new Intent(MainActivity.this, LoginActivity.class);
@@ -122,8 +123,8 @@ public class MainActivity extends ActionBarActivity {
 
     public void getAllUsers(View view) throws JSONException, ExecutionException, InterruptedException {
         progress = new ProgressDialog(MainActivity.this);
-        progress.setTitle("טוען");
-        progress.setMessage("אנא המתן...");
+        progress.setTitle(getString(R.string.Login_dialog_head));
+        progress.setMessage(getString(R.string.Login_dialog_message));
         progress.show();
 
         new GetAndDisplayAllUsersAsync().execute();
@@ -143,7 +144,7 @@ public class MainActivity extends ActionBarActivity {
                 result += "Name: " + users.get(i).getName() + "\n\n";
             }
 
-            result += loggedToken ;
+            result += loggedToken;
             tv.setText(result);
         }
 
@@ -176,5 +177,7 @@ public class MainActivity extends ActionBarActivity {
     }
 
     public void getAllBills(View view) {
+        Intent intent = new Intent(MainActivity.this, BillsActivity.class);
+        startActivity(intent);
     }
 }
