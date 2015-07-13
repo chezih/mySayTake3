@@ -56,7 +56,10 @@ public class MainActivity extends ActionBarActivity {
 
         bl = new BL();
         tv = (TextView) findViewById(R.id.infoTextArea);
-
+        progress = new ProgressDialog(MainActivity.this);
+        progress.setTitle(getString(R.string.Login_dialog_head));
+        progress.setMessage(getString(R.string.Login_dialog_message));
+        progress.show();
         if (loggedToken == "") {
             Intent intent = new Intent(MainActivity.this, LoginActivity.class);
             startActivity(intent);
@@ -75,7 +78,7 @@ public class MainActivity extends ActionBarActivity {
             }
         }
 
-
+        new GetAndDisplayAllUsersAsync().execute();
     }
 
     @Override
@@ -139,14 +142,14 @@ public class MainActivity extends ActionBarActivity {
         @Override
         protected void onPostExecute(Void aVoid) {
 
-            for (int i = 0; i < users.size(); i++) {
-                result += "USER #" + i + "\n";
-                result += "Id: " + users.get(i).getId() + "\n";
-                result += "Name: " + users.get(i).getName() + "\n\n";
-            }
-
-            result += loggedToken;
-            tv.setText(result);
+//            for (int i = 0; i < users.size(); i++) {
+//                result += "USER #" + i + "\n";
+//                result += "Id: " + users.get(i).getId() + "\n";
+//                result += "Name: " + users.get(i).getName() + "\n\n";
+//            }
+//
+//            result += loggedToken;
+//            tv.setText(result);
         }
 
         @Override
@@ -154,6 +157,7 @@ public class MainActivity extends ActionBarActivity {
 
             try {
                 users = bl.getAllUsers();
+                progress.dismiss();
                 ((GlobalData) MainActivity.this.getApplication()).setSavedUsers(users);
                 for (User user : users) {
 
