@@ -17,6 +17,7 @@ import com.test.choyzer.mysaytake3.Activities.UserProfileActivity;
 import com.test.choyzer.mysaytake3.Model.Authentication.TokenGetter;
 import com.test.choyzer.mysaytake3.Model.BL;
 import com.test.choyzer.mysaytake3.Model.Entities.User;
+import com.test.choyzer.mysaytake3.Model.GlobalData;
 import com.test.choyzer.mysaytake3.Utils.CredentialsStorage;
 
 import org.json.JSONException;
@@ -153,6 +154,7 @@ public class MainActivity extends ActionBarActivity {
 
             try {
                 users = bl.getAllUsers();
+                ((GlobalData) MainActivity.this.getApplication()).setSavedUsers(users);
                 for (User user : users) {
 
                     if (loggedInUserName.equals(user.getFirstName())) {

@@ -47,6 +47,22 @@ public class BL {
 
     }
 
+//    public User getUserById(int id) throws JSONException, ExecutionException, InterruptedException {
+//        String usersJsonString = comm.getJsonByPath(USER_TABLE_PATH_NAME);
+//
+//        ArrayList<User> users = new ArrayList<User>();
+//        JSONArray jsonArray = new JSONArray(usersJsonString);
+//
+//        for (int i = 0; i < jsonArray.length(); i++) {
+//            JSONObject userObject =
+//                    jsonArray.getJSONObject(i);
+//            users.add(new User(userObject));
+//        }
+//
+//        return users;
+//
+//    }
+
     public ArrayList<Bill> getAllBills() throws JSONException, ExecutionException, InterruptedException {
         String billsJsonString = comm.getJsonByPath(BILL_TABLE_PATH_NAME);
 

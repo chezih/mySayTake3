@@ -7,8 +7,12 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import com.test.choyzer.mysaytake3.Activities.BillDetailActivity;
+import com.test.choyzer.mysaytake3.MainActivity;
 import com.test.choyzer.mysaytake3.Model.Entities.Bill;
 import com.test.choyzer.mysaytake3.Model.Entities.BillComment;
+import com.test.choyzer.mysaytake3.Model.Entities.User;
+import com.test.choyzer.mysaytake3.Model.GlobalData;
 import com.test.choyzer.mysaytake3.R;
 
 import java.text.SimpleDateFormat;
@@ -20,7 +24,10 @@ import java.util.ArrayList;
 public class BillCommentRowAdapter extends ArrayAdapter<BillComment> {
     public BillCommentRowAdapter(Context context, ArrayList<BillComment> billComments) {
         super(context, 0, billComments);
+        this.context = context;
     }
+
+    Context context;
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -30,16 +37,32 @@ public class BillCommentRowAdapter extends ArrayAdapter<BillComment> {
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.bill_comment_row_template, parent, false);
         }
+
+        ArrayList<User> users = ((GlobalData) (((BillDetailActivity) context).getApplication())).getSavedUsers();
+        User userThatWroteThisComment = null;
+        for (User user : users) {
+            if (user.getId() == billComment.getUser_id()) {
+                userThatWroteThisComment = user;
+            }
+        }
         // Lookup view for data population
         TextView commentContentTextView = (TextView) convertView.findViewById(R.id.commentContentTextView);
         TextView commentUserNameTextView = (TextView) convertView.findViewById(R.id.commentUserNameTextView);
         TextView commentDateTextView = (TextView) convertView.findViewById(R.id.commentDateTextView);
+        if (userThatWroteThisComment != null) {
+            commentUserNameTextView.setText(userThatWroteThisComment.getName());
+        } else {
+            commentUserNameTextView.setText(String.valueOf(billComment.getUser_id()));
+        }
+
         // Populate the data into the template view using the data object
         commentContentTextView.setText(billComment.getContent());
-        commentUserNameTextView.setText(String.valueOf(billComment.getUser_id()));
+
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         commentDateTextView.setText(sdf.format(billComment.getDate()));
         // Return the completed view to render on screen
         return convertView;
     }
+
+
 }

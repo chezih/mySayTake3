@@ -15,6 +15,8 @@ import com.test.choyzer.mysaytake3.Adapters.BillRowAdapter;
 import com.test.choyzer.mysaytake3.Model.BL;
 import com.test.choyzer.mysaytake3.Model.Entities.Bill;
 import com.test.choyzer.mysaytake3.Model.Entities.BillComment;
+import com.test.choyzer.mysaytake3.Model.Entities.User;
+import com.test.choyzer.mysaytake3.Model.GlobalData;
 import com.test.choyzer.mysaytake3.R;
 
 import org.json.JSONException;
@@ -47,7 +49,7 @@ public class BillDetailActivity extends Activity {
         currentBill = (Bill) intent.getSerializableExtra("currentBill");
         billDetailSubjectTextView = (TextView) findViewById(R.id.billDetailSubjectTextView);
         billDetailDescriptionTextView = (TextView) findViewById(R.id.billDetailDescriptionTextView);
-
+        ArrayList<User> users = ((GlobalData) this.getApplication()).getSavedUsers();
         billDetailSubjectTextView.setText(currentBill.getSubject());
         billDetailDescriptionTextView.setText(currentBill.getDescription());
 
