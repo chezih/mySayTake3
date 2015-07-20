@@ -38,7 +38,7 @@ import java.util.logging.Logger;
 public class MainActivity extends ActionBarActivity {
 
     String result;
-    BL bl = null;
+
     TextView tv;
     String loggedInUserName;
     String loggedToken;
@@ -54,7 +54,7 @@ public class MainActivity extends ActionBarActivity {
         loggedInUserName = CredentialsStorage.getFromPrefs(MainActivity.this, CredentialsStorage.PREFS_LOGIN_USERNAME_KEY, "");
         loggedToken = CredentialsStorage.getFromPrefs(MainActivity.this, CredentialsStorage.PREFS_LOGIN_TOKEN_KEY, "");
 
-        bl = new BL();
+
         tv = (TextView) findViewById(R.id.infoTextArea);
         progress = new ProgressDialog(MainActivity.this);
         progress.setTitle(getString(R.string.Login_dialog_head));
@@ -64,21 +64,11 @@ public class MainActivity extends ActionBarActivity {
             Intent intent = new Intent(MainActivity.this, LoginActivity.class);
             startActivity(intent);
         } else {
-            if (loggedInUserName != "") {
-                //Toast.makeText(getApplicationContext(), "Welcome back " + loggedInUserName, Toast.LENGTH_LONG).show();
-//                try {
-//                    getAllUsers(this.findViewById(android.R.id.content));
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                } catch (ExecutionException e) {
-//                    e.printStackTrace();
-//                } catch (InterruptedException e) {
-//                    e.printStackTrace();
-//                }
-            }
+            BL.getInstance().setToken(loggedToken);
+            new GetAndDisplayAllUsersAsync().execute();
         }
 
-        new GetAndDisplayAllUsersAsync().execute();
+
     }
 
     @Override
@@ -156,7 +146,7 @@ public class MainActivity extends ActionBarActivity {
         protected Void doInBackground(Void... urls) {
 
             try {
-                users = bl.getAllUsers();
+                users = BL.getInstance().getAllUsers();
                 progress.dismiss();
                 ((GlobalData) MainActivity.this.getApplication()).setSavedUsers(users);
                 for (User user : users) {

@@ -34,13 +34,11 @@ public class BillDetailActivity extends Activity {
     Bill currentBill;
     ProgressDialog progress;
     ArrayList<BillComment> arrayOfBillComments;
-    BL bl;
     ListView listView;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bill_details);
-        bl = new BL();
         progress = new ProgressDialog(BillDetailActivity.this);
         progress.setTitle(getString(R.string.Login_dialog_head));
         progress.setMessage(getString(R.string.Login_dialog_message));
@@ -99,7 +97,7 @@ public class BillDetailActivity extends Activity {
         protected Void doInBackground(Void... urls) {
 
             try {
-                arrayOfBillComments = bl.getBillsComments(currentBill.getId());
+                arrayOfBillComments = BL.getInstance().getBillsComments(currentBill.getId());
                 progress.dismiss();
 //                Token = TokenGetter.executePost(new JSONObject("{\"password\": \"050788\", \"username\": \"chezi\"}"));
             } catch (JSONException e) {

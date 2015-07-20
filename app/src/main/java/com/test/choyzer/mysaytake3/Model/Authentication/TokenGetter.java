@@ -58,7 +58,7 @@ public class TokenGetter {
                 return ("Failed : HTTP error code : " + httpConnection.getResponseCode());
             }
 
-            //Recebendo Response
+
             InputStream is = httpConnection.getInputStream();
             BufferedReader rd = new BufferedReader(new InputStreamReader(is));
 

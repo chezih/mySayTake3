@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.test.choyzer.mysaytake3.MainActivity;
 import com.test.choyzer.mysaytake3.Model.Authentication.TokenGetter;
+import com.test.choyzer.mysaytake3.Model.BL;
 import com.test.choyzer.mysaytake3.R;
 import com.test.choyzer.mysaytake3.Utils.CredentialsStorage;
 
@@ -77,23 +78,9 @@ public class LoginActivity extends Activity {
     class LoginAsync extends AsyncTask<Void, Void, Void> {
         @Override
         protected void onPostExecute(Void aVoid) {
-
             progress.dismiss();
-            try {
-                JSONObject tokenJsonObject = new JSONObject(TokenJson);
-                Iterator<?> keys = tokenJsonObject.keys();
-                while (keys.hasNext()) {
-                    String key = (String) keys.next();
-                    Token = tokenJsonObject.getString(key);
-                    //Toast.makeText(getApplicationContext(), "Authentication successful with token: " + Token, Toast.LENGTH_LONG).show();
-                    CredentialsStorage.saveToPrefs(LoginActivity.this, CredentialsStorage.PREFS_LOGIN_USERNAME_KEY, userNameEditText.getText().toString());
-                    CredentialsStorage.saveToPrefs(LoginActivity.this, CredentialsStorage.PREFS_LOGIN_TOKEN_KEY, Token);
-                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                    startActivity(intent);
-                }
-            } catch (JSONException e) {
-                Toast.makeText(getApplicationContext(), "Authentication failed", Toast.LENGTH_LONG).show();
-            }
+            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+            startActivity(intent);
         }
 
         @Override
@@ -103,6 +90,22 @@ public class LoginActivity extends Activity {
             String password = passwordEditText.getText().toString();
             try {
                 TokenJson = TokenGetter.executePost(new JSONObject("{\"password\": \"" + password + "\", \"username\": \"" + userName + "\"}"));
+
+                try {
+                    JSONObject tokenJsonObject = new JSONObject(TokenJson);
+                    Iterator<?> keys = tokenJsonObject.keys();
+                    while (keys.hasNext()) {
+                        String key = (String) keys.next();
+                        Token = tokenJsonObject.getString(key);
+                        //Toast.makeText(getApplicationContext(), "Authentication successful with token: " + Token, Toast.LENGTH_LONG).show();
+                        CredentialsStorage.saveToPrefs(LoginActivity.this, CredentialsStorage.PREFS_LOGIN_USERNAME_KEY, userNameEditText.getText().toString());
+                        CredentialsStorage.saveToPrefs(LoginActivity.this, CredentialsStorage.PREFS_LOGIN_TOKEN_KEY, Token);
+                    }
+                } catch (JSONException e) {
+                    Toast.makeText(getApplicationContext(), "Authentication failed", Toast.LENGTH_LONG).show();
+                }
+
+                BL.getInstance().setToken(Token);
             } catch (JSONException e) {
                 e.printStackTrace();
             }

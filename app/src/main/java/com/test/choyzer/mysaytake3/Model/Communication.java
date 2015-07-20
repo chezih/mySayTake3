@@ -34,6 +34,12 @@ public class Communication {
     String jsonString;
     String userPath;
 
+    String token;
+
+    public void SetToken(String token) {
+        this.token = token;
+    }
+
     public String getJsonByPath(String path) throws ExecutionException, InterruptedException {
 
         userPath = REST_BASE_URL + path;
@@ -49,6 +55,7 @@ public class Communication {
             c.setRequestMethod("GET");
             c.setRequestProperty("Content-length", "0");
             c.setRequestProperty("Content-Type", "text/json; charset=utf-8");
+            c.setRequestProperty("Authorization", "Token " + this.token);
             c.setUseCaches(false);
             c.setAllowUserInteraction(false);
             c.setConnectTimeout(timeout);
@@ -67,6 +74,8 @@ public class Communication {
                     }
                     br.close();
                     return sb.toString();
+                case 401:
+                    System.out.println("BUG!! Got 401, missing token??");
             }
 
         } catch (MalformedURLException ex) {

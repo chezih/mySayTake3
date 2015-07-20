@@ -15,15 +15,29 @@ import java.util.concurrent.ExecutionException;
  */
 public class BL {
 
+    private static BL instance = null;
+    protected BL() {
+        // Exists only to defeat instantiation.
+    }
+    public static BL getInstance() {
+        if(instance == null) {
+            instance = new BL();
+            instance.comm = new Communication();
+        }
+        return instance;
+    }
+
     Communication comm;
 
-    private final String USER_TABLE_PATH_NAME = "users";
-    private final String BILL_TABLE_PATH_NAME = "bills";
-    private final String BILL_COMMENT_TABLE_PATH_NAME = "billComments";
+    private final String USER_TABLE_PATH_NAME = "user-profile";
+    private final String BILL_TABLE_PATH_NAME = "bill";
+    private final String BILL_COMMENT_TABLE_PATH_NAME = "bill-comment";
 
-    public BL() {
-        comm = new Communication();
+    public void setToken(String token)
+    {
+        BL.getInstance().comm.SetToken(token);
     }
+
 
 //    public User getUserByID(int id) {
 //        JSONObject userJson = comm.getJsonByPath(USER_TABLE_PATH_NAME);
